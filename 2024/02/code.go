@@ -3,8 +3,8 @@ package main
 import (
 	"aoc-in-go/utils"
 	"bufio"
-	"strings"
 	"github.com/jpillora/puzzler/harness/aoc"
+	"strings"
 )
 
 func main() {
@@ -41,20 +41,19 @@ func run(part2 bool, input string) any {
 		for scanner.Scan() {
 			line := scanner.Text()
 			report, err := utils.SliceAtoi(strings.Split(line, " "))
-      utils.Check(err)
+			utils.Check(err)
 
+			for i := range report {
+				subreport := make([]int, 0)
 
-      for i := range(report) {
-        subreport := make([]int, 0)
+				subreport = append(subreport, report[:i]...)
+				subreport = append(subreport, report[i+1:]...)
 
-        subreport = append(subreport, report[:i]...)
-        subreport = append(subreport, report[i+1:]...)
-
-        if isReportSafe(subreport) {
-          safe_reports++;
-          break;
-        }
-      }
+				if isReportSafe(subreport) {
+					safe_reports++
+					break
+				}
+			}
 		}
 		return safe_reports
 	}
@@ -62,7 +61,7 @@ func run(part2 bool, input string) any {
 	for scanner.Scan() {
 		line := scanner.Text()
 		report, err := utils.SliceAtoi(strings.Split(line, " "))
-    utils.Check(err)
+		utils.Check(err)
 
 		if isReportSafe(report) {
 			safe_reports++
