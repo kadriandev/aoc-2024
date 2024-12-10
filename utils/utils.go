@@ -13,7 +13,6 @@ func Check(e error) {
 func Str_to_int(s string) int {
 	i, err := strconv.Atoi(s)
 	Check(err)
-
 	return i
 }
 
@@ -27,4 +26,21 @@ func SliceAtoi(sa []string) ([]int, error) {
 		si = append(si, i)
 	}
 	return si, nil
+}
+
+func Filter[T any](ss []T, test func(T) bool) (ret []T) {
+	for _, s := range ss {
+		if test(s) {
+			ret = append(ret, s)
+		}
+	}
+	return
+}
+
+func Sum(input []int) int {
+	sum := 0
+	for i := range input {
+		sum += input[i]
+	}
+	return sum
 }
