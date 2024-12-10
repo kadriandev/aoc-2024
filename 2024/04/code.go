@@ -1,6 +1,10 @@
 package main
 
 import (
+  "aoc-in-go/utils"
+	"bufio"
+	"strings"
+
 	"github.com/jpillora/puzzler/harness/aoc"
 )
 
@@ -8,17 +12,58 @@ func main() {
 	aoc.Harness(run)
 }
 
-// on code change, run will be executed 4 times:
-// 1. with: false (part1), and example input
-// 2. with: true (part2), and example input
-// 3. with: false (part1), and user input
-// 4. with: true (part2), and user input
-// the return value of each run is printed to stdout
+func parseInput(input string) utils.TwoDArray {
+  board := [][]rune{}
+  r := strings.NewReader(input)
+  scanner := bufio.NewScanner(r)
+
+  for scanner.Scan() {
+    line := scanner.Text()
+    board = append(board, []rune(line))
+  }
+  arr := utils.TwoDArray{ Board: board }
+  return arr
+}
+
 func run(part2 bool, input string) any {
-	// when you're ready to do part 2, remove this "not implemented" block
+  xmas_count := 0
+  board := parseInput(input)
+  
 	if part2 {
-		return "not implemented"
+    for i := 1; i < len(board.Board) - 1; i++ {
+      for j := 1; j < len(board.Board[i]) - 1; j++ {
+        if board.Board[i][j] == 'A' {
+          mas_count := 0
+          // Forward Diagonal 
+          if (board.Board[i-1][j-1] == 'M' && board.Board[i+1][j+1] == 'S') ||
+          (board.Board[i-1][j-1] == 'S' && board.Board[i+1][j+1] == 'M') {
+            mas_count++
+          }
+
+          // Backwards diagonal
+          if (board.Board[i+1][j-1] == 'M' && board.Board[i-1][j+1] == 'S') ||
+          (board.Board[i+1][j-1] == 'S' && board.Board[i-1][j+1] == 'M') {
+            mas_count++
+          }
+
+          if(mas_count == 2) {
+            xmas_count++;
+          }
+        }
+      }
+    }
+    return xmas_count;
 	}
-	// solve part 1 here
-	return 42
+
+  for i, row := range(board.Board) {
+    for j := range(row) {
+      for k := 0; k < 8; k++ {
+        if board.FindWord("XMAS", i, j, utils.Direction(k)) {
+          xmas_count++;
+        }
+      }
+    }
+  }
+
+  return xmas_count
 }
